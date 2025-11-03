@@ -7,6 +7,13 @@ def hello_world():
     day_of_week = datetime.today().strftime('%A')
     return render_template("index.html", day_of_week=day_of_week)
 
+@app.route("/submit", methods=['POST'])
+def submit():
+    print('taking input from user')
+    form_data = dict(request.form)
+
+    return form_data
+
 @app.route("/api/<name>")
 def dynamic_route(name):
     result = "<p>Hello " +name+ "</p>"

@@ -10,6 +10,17 @@
 <body>
     <p>welcome to the site</p>
     <p>Today is {{day_of_week}}</p>
+
+    <form action="/submit" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <input type="submit" value="Sign Up">
+    </form>
+
 </body>
 <style>
     body {
