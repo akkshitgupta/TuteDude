@@ -1,5 +1,16 @@
 from flask import Flask, request, render_template
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+import pymongo
+
+load_dotenv()
+
+# DB connection
+mongo_uri = os.getenv('MONGO_URI')
+client = pymongo.MongoClient(mongo_uri)
+db = client.test
+collection = db['flask']
 
 app = Flask(__name__)
 @app.route("/")
@@ -11,8 +22,17 @@ def hello_world():
 def submit():
     print('taking input from user')
     form_data = dict(request.form)
+    collection.insert_one(form_data)
 
-    return form_data
+    return 'Data submitted successfully'
+
+@app.route("/view")
+def view():
+    data = list(collection.find())
+    for i in data:
+        del i["_id"]
+
+    return data
 
 @app.route("/api/<name>")
 def dynamic_route(name):
