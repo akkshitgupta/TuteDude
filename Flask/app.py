@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from datetime import datetime
 from dotenv import load_dotenv
 import os
 import pymongo
+import json
 
 load_dotenv()
 
@@ -33,6 +34,20 @@ def view():
         del i["_id"]
 
     return data
+
+DATA_FILE = os.path.join(os.path.dirname(__file__), 'data.json')
+
+@app.route('/api', methods=['GET'])
+def get_data():
+    """Read data from JSON file and return it as a response."""
+    try:
+        with open(DATA_FILE, 'r') as file:
+            data = json.load(file)
+        return jsonify(data), 200
+    except FileNotFoundError:
+        return jsonify({"error": "Data file not found"}), 404
+    except json.JSONDecodeError:
+        return jsonify({"error": "Invalid JSON format in data file"}), 500
 
 @app.route("/api/<name>")
 def dynamic_route(name):
